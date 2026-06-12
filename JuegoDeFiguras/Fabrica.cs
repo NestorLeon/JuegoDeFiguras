@@ -48,8 +48,13 @@ namespace JuegoDeFiguras
             IniciarCreadorDeObjetos();
             IniciarRecolectorDeObjetos();
 
-            await taskCrearObjetos;
-            await taskRecolectarObjetos;
+            var crear = taskCrearObjetos;
+            var recolectar = taskRecolectarObjetos;
+
+            if (crear == null || recolectar == null)
+                throw new InvalidOperationException("No se pudieron iniciar las tareas.");
+
+            await Task.WhenAll(crear, recolectar);
         }
         public void Parar()
         {
@@ -85,7 +90,11 @@ namespace JuegoDeFiguras
                     figura.Alto = alto;
 
                     if (figura != null)
+                    {
                         this.ContenedorFiguras.Enqueue(figura);
+                        Console.WriteLine("Figura Creada y colocada en la zona de creación para su recolección");
+                    }
+                        
                 }
                 Thread.Sleep(500);
                 figura = null;
@@ -98,11 +107,12 @@ namespace JuegoDeFiguras
                 if (this.ContenedorFiguras.Count > 0)
                 {
                     Figura figura = this.ContenedorFiguras.Dequeue();
+                    this.Juego.CantidadFigurasEnCola = this.ContenedorFiguras.Count;
                     this.Juego.Figuras.Add(figura);
                     figura = null;
                 }
-                Thread.Sleep(650);
-                Console.WriteLine("Objeto recolectado");
+                Thread.Sleep(550);
+                Console.WriteLine("Objeto recolectado de la zona de creación y puesto en el Juego");
             }
         }
         private void DefineAnchoAlto(FormaTypes forma, out double ancho, out double alto)

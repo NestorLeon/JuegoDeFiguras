@@ -18,6 +18,7 @@ namespace JuegoDeFiguras
         public int AnchoDibujo { get; set; }
         public int AltoDibujo { get; set; }
         private int Contador { get; set; }
+        public int CantidadFigurasEnCola { get; set; }
         #endregion
 
         #region VARIABLES
@@ -40,6 +41,7 @@ namespace JuegoDeFiguras
             this.Tiempo = 0;
             this.keysPressed = new HashSet<GameKeys>();
             this.Contador = 0;
+            this.CantidadFigurasEnCola = 0;
         }
         #endregion
 
@@ -84,6 +86,7 @@ namespace JuegoDeFiguras
                 foreach (Figura figuraAEliminar in figurasAEliminar)
                 {
                     this.Figuras.Remove(figuraAEliminar);
+                    Console.WriteLine("Figura atrapada.");
                 }
                 #endregion
 
@@ -98,6 +101,7 @@ namespace JuegoDeFiguras
                 foreach(Figura figuraAEliminar in figurasAEliminar)
                 {
                     this.Figuras.Remove(figuraAEliminar);
+                    Console.WriteLine("Figura eliminada del juego.");
                 }
                 
             }
@@ -130,10 +134,16 @@ namespace JuegoDeFiguras
                 this.Jugador.Dibujar(ref graphics);
 
                 // MOSTRAR EL CONTADOR
-                graphics.DrawString(this.Contador.ToString(),
+                graphics.DrawString("Figuras Atrapadas: " + this.Contador.ToString(),
                     new Font(FontFamily.GenericSerif, 12f), 
                     Brushes.Red,
                     5, 2);
+
+                // MOSTRAR LA CANTIDAD DE FIGURAS EN LA ZONA DE CREACIÓN
+                graphics.DrawString("Figuras en Zona de Creación: " + this.CantidadFigurasEnCola.ToString(),
+                    new Font(FontFamily.GenericSerif, 12f),
+                    Brushes.Red,
+                    5, 32);
 
                 /* // DIBUJO DEL TIEMPO
                 graphics.DrawString(this.Tiempo.ToString(),
